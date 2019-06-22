@@ -34,20 +34,23 @@ def tags(update, verbose, yaml_file):
         repo_tags = requests.get(base_url.format(base, project), verify=False).json()
 
         # check the first tag as they are sorted in descending order
-        latest_tag = repo_tags[0]["name"]
+        # need to convert the tag to str to not write it as !!python/unicode
+        latest_tag = str(repo_tags[0]["name"])
         if verbose and latest_tag == git_tag:
             print("[INFO] OK for {}".format(link))
-        else:
+        elif latest_tag != git_tag:
             print(
-                "[ERROR] latest tag for {} is {} but you have {}".format(
+                "[WARN] latest tag for {} is {} but you have {}".format(
                     link, latest_tag, git_tag
                 )
             )
 
             if update:
-                # need to convert the tag to str to not write it as !!python/unicode
-                data[i]["version"] = str(latest_tag)
+                data[i]["version"] = latest_tag
                 update_yaml(yaml_file, data)
+        else:
+            # means latest_tag == git_tag but we don't need to output that
+            continue
 
 
 if __name__ == "__main__":
