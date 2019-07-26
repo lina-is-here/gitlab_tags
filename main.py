@@ -1,6 +1,8 @@
 import click
 import requests
 import yaml
+import urllib3
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 base_url = "{}.com/api/v4/projects/{}/repository/tags"
 
@@ -37,10 +39,10 @@ def tags(update, verbose, yaml_file):
         # need to convert the tag to str to not write it as !!python/unicode
         latest_tag = str(repo_tags[0]["name"])
         if verbose and latest_tag == git_tag:
-            print("[INFO] OK for {}".format(link))
+            print("\033[1;32;40m[INFO] OK for {} ({})\033[0m".format(link, git_tag))
         elif latest_tag != git_tag:
             print(
-                "[WARN] latest tag for {} is {} but you have {}".format(
+                "\033[1;31;40m[WARN] latest tag for {} is {} but you have {}\033[0m".format(
                     link, latest_tag, git_tag
                 )
             )
