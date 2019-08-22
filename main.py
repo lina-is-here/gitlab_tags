@@ -2,6 +2,7 @@ import click
 import requests
 import yaml
 import urllib3
+
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 base_url = "{}.com/api/v4/projects/{}/repository/tags"
