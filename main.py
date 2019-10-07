@@ -50,6 +50,8 @@ def tags(update, verbose, yaml_file):
 
             if update:
                 data[i]["version"] = latest_tag
+                if verbose:
+                    print("\033[1;34;40m[INFO] updating tag for {} from {} to {}\033[0m".format(link, git_tag, latest_tag))
                 update_yaml(yaml_file, data)
         else:
             # means latest_tag == git_tag but we don't need to output that
