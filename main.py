@@ -19,7 +19,8 @@ def data_yamls(path):
 
 def update_yaml(path, dictionary):
     with open(path, "w") as f:
-        yaml.dump(dictionary, f)
+        dump = yaml.dump(dictionary, default_flow_style=False)
+        f.write(dump.replace('\n- ', '\n\n- '))
 
 
 @click.command()
