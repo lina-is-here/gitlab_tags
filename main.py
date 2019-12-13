@@ -30,7 +30,7 @@ def tags(update, verbose, yaml_file):
     data = data_yamls(yaml_file)
     for i, entry in enumerate(data):
         link = entry["src"]
-        git_tag = entry["version"]
+        git_tag = entry.get("version", None)
 
         base, project = link.split(".com/")
         project = project.replace(".git", "").replace("/", "%2F")
@@ -41,7 +41,7 @@ def tags(update, verbose, yaml_file):
         latest_tag = str(repo_tags[0]["name"])
         if verbose and latest_tag == git_tag:
             print("\033[1;32;40m[INFO] OK for {} ({})\033[0m".format(link, git_tag))
-        elif latest_tag != git_tag:
+        elif latest_tag != git_tag and git_tag is not None:
             print(
                 "\033[1;31;40m[WARN] latest tag for {} is {} but you have {}\033[0m".format(
                     link, latest_tag, git_tag
@@ -53,6 +53,8 @@ def tags(update, verbose, yaml_file):
                 if verbose:
                     print("\033[1;34;40m[INFO] updating tag for {} from {} to {}\033[0m".format(link, git_tag, latest_tag))
                 update_yaml(yaml_file, data)
+        elif git_tag is None:
+            print("\033[1;32;40m[INFO] UNKNOWN for {}. Latest is {}\033[0m".format(link, latest_tag))
         else:
             # means latest_tag == git_tag but we don't need to output that
             continue
