@@ -1,6 +1,6 @@
 import click
+import oyaml as yaml
 import requests
-import yaml
 import urllib3
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
